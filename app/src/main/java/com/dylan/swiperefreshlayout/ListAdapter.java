@@ -22,6 +22,8 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private boolean mShowFooter;
 
+    private ItemClickListener mClickListener;
+
     public ListAdapter(Context context, List<String> dataListS) {
         this.mContext = context;
         this.mDataListS = dataListS;
@@ -68,25 +70,49 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    static class NormalHolder extends RecyclerView.ViewHolder {
+    public interface ItemClickListener {
+        void onItemClick(int postion);
+    }
+
+    public void setOnItemClickListener(ItemClickListener listener){
+        this.mClickListener = listener;
+    }
+
+    class NormalHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
         @BindView(R.id.list_text)
         TextView mTextView;
 
         public NormalHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(mClickListener != null){
+                mClickListener.onItemClick(getAdapterPosition());
+            }
         }
     }
 
-    static class FootHolder extends RecyclerView.ViewHolder {
+    class FootHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
         @BindView(R.id.list_footer)
         RelativeLayout mRelativeLayout;
 
         public FootHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(mClickListener != null){
+                mClickListener.onItemClick(getAdapterPosition());
+            }
         }
     }
 }

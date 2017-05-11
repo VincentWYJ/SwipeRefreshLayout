@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -52,7 +53,15 @@ public class MainActivity extends AppCompatActivity {
             mDataListS.add("item " + i);
         }
         mListAdapter = new ListAdapter(this, mDataListS);
+        mListAdapter.setOnItemClickListener(new ListAdapter.ItemClickListener() {
+
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(MainActivity.this, mDataListS.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
         mRecyclerView.setAdapter(mListAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerView.addItemDecoration(new ListDecoration(this, ListDecoration.VERTICAL_LIST));
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -61,11 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (mLastVisibleItem + 2 == mListAdapter.getItemCount() ||
-                            mLastVisibleItem + 1 == mListAdapter.getItemCount()) {
-                        if (mIsDown2Up) {
-                            getDataByRxJava();
-                        }
+                    if (mIsDown2Up && (mLastVisibleItem + 2 == mListAdapter.getItemCount() ||
+                            mLastVisibleItem + 1 == mListAdapter.getItemCount())) {
+                        getDataByRxJava();
                     }
                 }
             }
