@@ -48,7 +48,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == NormalType) {
             return new NormalHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item, null));
         } else {
-            return new FootHolder(LayoutInflater.from(mContext).inflate(R.layout.list_footer, null));
+            return new FooterHolder(LayoutInflater.from(mContext).inflate(R.layout.list_footer, null));
         }
     }
 
@@ -58,9 +58,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((NormalHolder) holder).mTextView.setText(mDataListS.get(position));
         } else {
             if (mShowFooter) {
-                ((FootHolder) holder).mRelativeLayout.setVisibility(View.VISIBLE);
+                ((FooterHolder) holder).mRelativeLayout.setVisibility(View.VISIBLE);
             } else {
-                ((FootHolder) holder).mRelativeLayout.setVisibility(View.GONE);
+                ((FooterHolder) holder).mRelativeLayout.setVisibility(View.GONE);
             }
         }
     }
@@ -78,7 +78,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mClickListener = listener;
     }
 
-    class NormalHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    class NormalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.list_text)
         TextView mTextView;
 
@@ -97,22 +97,14 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class FootHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    class FooterHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.list_footer)
         RelativeLayout mRelativeLayout;
 
-        public FootHolder(View itemView) {
+        public FooterHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if(mClickListener != null){
-                mClickListener.onItemClick(getAdapterPosition());
-            }
         }
     }
 }
